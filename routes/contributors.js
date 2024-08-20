@@ -1,0 +1,75 @@
+const express = require('express');
+const Contributor = require('../models/contributor');
+const Passport = require('../models/passport');
+const BankAgreement = require('../models/bankAgreement');
+
+const router = express.Router();
+
+// Create a new contributor
+router.post('/', async (req, res) => {
+  try {
+    const { passport, bankAgreement, ...contributorData } = req.body;
+
+    // Create related entities
+    const createdPassport = await Passport.create(passport);
+    let createdAgreement = null;
+    if (bankAgreement) {
+      createdAgreement = await BankAgreement.create(bankAgreement);
+    }
+
+    // Create contributor
+    const contributor = await Contributor.create({
+      ...contributorData,
+      passport_id: createdPassport.passport_id,
+      agreement_id: createdAgreement ? createdAgreement.agreement_id : null
+    });
+
+    res.status(201).json(contributor);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// Get a contributor by ID
+router.get('/:id', async (req, res) => {
+  try {
+    const contributor = await Contributor.findById(req.params.id);
+    if (contributor) {
+      res.json(contributor);
+    } else {
+      res.status(404).json({ error: 'Contributor not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Update a contributor
+router.put('/:id', async (req, res) => {
+  try {
+    const contributor = await Contributor.update(req.params.id, req.body);
+    if (contributor) {
+      res.json(contributor);
+    } else {
+      res.status(404).json({ error: 'Contributor not found' });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// Delete a contributor
+router.delete('/:id', async (req, res) => {
+  try {
+    const contributor = await Contributor.delete(req.params.id);
+    if (contributor) {
+      res.json({ message: 'Contributor deleted successfully' });
+    } else {
+      res.status(404).json({ error: 'Contributor not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+module.exports = router;

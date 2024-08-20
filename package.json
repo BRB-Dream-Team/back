@@ -1,0 +1,28 @@
+{
+  "name": "brb-dream-team-backend",
+  "version": "0.0.1",
+  "description": "A Node.js Express application with PostgreSQL for a crowdfunding platform",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "db:setup": "node db/setup.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BRB-Dream-Team/back.git"
+  },
+  "author": "havaian",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/BRB-Dream-Team/back/issues"
+  },
+  "homepage": "https://github.com/BRB-Dream-Team/back#readme",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "pg": "^8.12.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
+  }
+}
