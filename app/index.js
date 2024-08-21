@@ -1,6 +1,4 @@
 const express = require('express');
-const swaggerUi = require('swagger-ui-express');
-const swaggerSpec = require('./swagger');
 
 const usersRouter = require('./routes/users');
 const phonesRouter = require('./routes/phones');
@@ -15,9 +13,6 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
-
-// Swagger
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Routes
 app.use('/users', usersRouter);
@@ -47,7 +42,6 @@ app.use((err, req, res, next) => {
 // Start the server
 app.listen(port, () => {
   console.log(`✅ Server: ${port}`);
-  console.log(`✅ Swagger: http://localhost:${port}/api-docs`);
 });
 
 module.exports = app;
