@@ -12,6 +12,39 @@ const contributionsRouter = require('./routes/contributions');
 const app = express();
 const port = process.env.PORT || 3000;
 
+const cors = require("cors");
+var corsOptions = {
+  origin: "*",
+};
+app.use(cors(corsOptions));
+
+// // Middleware to capture and log request and response details
+// app.use((req, res, next) => {
+//   const allowedHost = ["http://141.98.153.217:5173/"];  
+
+//   // Check if the Host header matches the allowed host
+//   if (req.headers.host !== "127.0.0.1:16005" && req.headers.host !== "141.98.153.217:16005" && req.headers.host !== "bot:16005" && !allowedHost.includes(req.headers.referer)) {
+//     res.status(403).json({ error: "Forbidden: Access is denied." });
+//     return;
+//   }
+
+//   // Middleware to log request and response details
+//   const originalSend = res.send;
+
+//   res.send = function (data) {
+//     res.locals.body = data;
+//     originalSend.call(this, data);
+//   };
+
+//   res.on('finish', () => {
+//     logger.info(`Request Headers: ${JSON.stringify(req.headers)}`);
+//     logger.info(`Request Body: ${JSON.stringify(req.body)}`);
+//     logger.info(`Response Data: ${res.locals.body}`);
+//   });
+
+//   next();
+// });
+
 app.use(express.json());
 
 // Routes
