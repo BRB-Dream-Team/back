@@ -37,7 +37,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/phones:
+ * /phones:
  *   post:
  *     summary: Create a new phone
  *     tags: [Phones]
@@ -68,7 +68,7 @@ router.post('/', async (req, res) => {
 
 /**
  * @swagger
- * /api/phones/{id}:
+ * /phones/{id}:
  *   get:
  *     summary: Get a phone by id
  *     tags: [Phones]
@@ -82,7 +82,7 @@ router.post('/', async (req, res) => {
  *     responses:
  *       200:
  *         description: The phone description by id
- *         contens:
+ *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Phone'
@@ -104,7 +104,7 @@ router.get('/:id', async (req, res) => {
 
 /**
  * @swagger
- * /api/phones/{id}:
+ * /phones/{id}:
  *  put:
  *    summary: Update the phone by the id
  *    tags: [Phones]
@@ -148,7 +148,7 @@ router.put('/:id', async (req, res) => {
 
 /**
  * @swagger
- * /api/phones/{id}:
+ * /phones/{id}:
  *   delete:
  *     summary: Remove the phone by id
  *     tags: [Phones]

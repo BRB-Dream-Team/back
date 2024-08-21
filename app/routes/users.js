@@ -46,7 +46,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/users:
+ * /users:
  *   post:
  *     summary: Create a new user
  *     tags: [Users]
@@ -77,7 +77,7 @@ router.post('/', async (req, res) => {
 
 /**
  * @swagger
- * /api/users/{id}:
+ * /users/{id}:
  *   get:
  *     summary: Get a user by id
  *     tags: [Users]
@@ -91,7 +91,7 @@ router.post('/', async (req, res) => {
  *     responses:
  *       200:
  *         description: The user description by id
- *         contens:
+ *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/User'
@@ -113,7 +113,7 @@ router.get('/:id', async (req, res) => {
 
 /**
  * @swagger
- * /api/users/{id}:
+ * /users/{id}:
  *  put:
  *    summary: Update the user by the id
  *    tags: [Users]
@@ -157,7 +157,7 @@ router.put('/:id', async (req, res) => {
 
 /**
  * @swagger
- * /api/users/{id}:
+ * /users/{id}:
  *   delete:
  *     summary: Remove the user by id
  *     tags: [Users]

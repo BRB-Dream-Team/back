@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "db:setup": "node db/setup.js"
+    "db:setup": "node app/db/setup.js"
   },
   "repository": {
     "type": "git",

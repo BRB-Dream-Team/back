@@ -23,13 +23,13 @@ const setupDatabase = async () => {
     try {
       // Execute the schema
       await client.query(schema);
-      console.log('Database schema has been successfully set up.');
+      console.log('✅ Database schema has been successfully set up.');
     } finally {
       // Release the client back to the pool
       client.release();
     }
   } catch (err) {
-    console.error('An error occurred while setting up the database:', err);
+    console.error('❌ An error occurred while setting up the database:', err);
   } finally {
     // Close the pool
     await pool.end();

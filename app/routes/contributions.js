@@ -47,7 +47,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/contributions:
+ * /contributions:
  *   post:
  *     summary: Create a new contribution
  *     tags: [Contributions]
@@ -78,7 +78,7 @@ router.post('/', async (req, res) => {
 
 /**
  * @swagger
- * /api/contributions/{id}:
+ * /contributions/{id}:
  *   get:
  *     summary: Get a contribution by id
  *     tags: [Contributions]
@@ -92,7 +92,7 @@ router.post('/', async (req, res) => {
  *     responses:
  *       200:
  *         description: The contribution description by id
- *         contens:
+ *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Contribution'
@@ -114,7 +114,7 @@ router.get('/:id', async (req, res) => {
 
 /**
  * @swagger
- * /api/contributions/{id}:
+ * /contributions/{id}:
  *  put:
  *    summary: Update the contribution by the id
  *    tags: [Contributions]
@@ -158,7 +158,7 @@ router.put('/:id', async (req, res) => {
 
 /**
  * @swagger
- * /api/contributions/{id}:
+ * /contributions/{id}:
  *   delete:
  *     summary: Remove the contribution by id
  *     tags: [Contributions]

@@ -76,7 +76,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/startups:
+ * /startups:
  *   post:
  *     summary: Create a new startup
  *     tags: [Startups]
@@ -107,7 +107,7 @@ router.post('/', async (req, res) => {
 
 /**
  * @swagger
- * /api/startups/{id}:
+ * /startups/{id}:
  *   get:
  *     summary: Get a startup by id
  *     tags: [Startups]
@@ -121,7 +121,7 @@ router.post('/', async (req, res) => {
  *     responses:
  *       200:
  *         description: The startup description by id
- *         contens:
+ *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Startup'
@@ -143,7 +143,7 @@ router.get('/:id', async (req, res) => {
 
 /**
  * @swagger
- * /api/startups/{id}:
+ * /startups/{id}:
  *  put:
  *    summary: Update the startup by the id
  *    tags: [Startups]
@@ -187,7 +187,7 @@ router.put('/:id', async (req, res) => {
 
 /**
  * @swagger
- * /api/startups/{id}:
+ * /startups/{id}:
  *   delete:
  *     summary: Remove the startup by id
  *     tags: [Startups]

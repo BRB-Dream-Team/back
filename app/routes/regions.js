@@ -29,7 +29,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/regions:
+ * /regions:
  *   post:
  *     summary: Create a new region
  *     tags: [Regions]
@@ -60,7 +60,7 @@ router.post('/', async (req, res) => {
 
 /**
  * @swagger
- * /api/regions/{id}:
+ * /regions/{id}:
  *   get:
  *     summary: Get a region by id
  *     tags: [Regions]
@@ -74,7 +74,7 @@ router.post('/', async (req, res) => {
  *     responses:
  *       200:
  *         description: The region description by id
- *         contens:
+ *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Region'
@@ -96,7 +96,7 @@ router.get('/:id', async (req, res) => {
 
 /**
  * @swagger
- * /api/regions/{id}:
+ * /regions/{id}:
  *  put:
  *    summary: Update the region by the id
  *    tags: [Regions]
@@ -140,7 +140,7 @@ router.put('/:id', async (req, res) => {
 
 /**
  * @swagger
- * /api/regions/{id}:
+ * /regions/{id}:
  *   delete:
  *     summary: Remove the region by id
  *     tags: [Regions]
