@@ -3,9 +3,9 @@ const db = require('../db');
 
 class User {
   static async create(userData) {
-    const { first_name, last_name, phone_id, email } = userData;
-    const query = 'INSERT INTO "User" (first_name, last_name, phone_id, email) VALUES ($1, $2, $3, $4) RETURNING *';
-    const values = [first_name, last_name, phone_id, email];
+    const { first_name, last_name, email, phone_id, entrepreneur_id, contributor_id } = userData;
+    const query = 'INSERT INTO Users (first_name, last_name, email, phone_id, entrepreneur_id, contributor_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
+    const values = [first_name, last_name, email, phone_id, entrepreneur_id, contributor_id];
     const result = await db.query(query, values);
     return result.rows[0];
   }

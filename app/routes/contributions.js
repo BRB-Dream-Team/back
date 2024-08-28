@@ -25,6 +25,19 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+router.get('/all/:id', async (req, res) => {
+  try {
+    const contributions = await Contribution.findByStartupId(req.params.id);
+    if (contributions) {
+      res.json(contributions);
+    } else {
+      res.status(404).json({ error: 'No contributions found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 router.put('/:id', async (req, res) => {
   try {
     const contribution = await Contribution.update(req.params.id, req.body);

@@ -25,6 +25,19 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+router.get('/', async (req, res) => {
+  try {
+    const categories = await Category.findAll();
+    if (categories) {
+      res.json(categories);
+    } else {
+      res.status(404).json({ error: 'No categories found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 router.put('/:id', async (req, res) => {
   try {
     const category = await Category.update(req.params.id, req.body);

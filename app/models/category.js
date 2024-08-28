@@ -14,6 +14,12 @@ class Category {
     return result.rows[0];
   }
 
+  static async findAll() {
+    const query = 'SELECT * FROM Category';
+    const result = await db.query(query);
+    return result.rows;
+  }
+
   static async update(categoryId, categoryData) {
     const { name } = categoryData;
     const query = 'UPDATE Category SET name = $1 WHERE category_id = $2 RETURNING *';

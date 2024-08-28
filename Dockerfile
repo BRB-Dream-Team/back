@@ -22,4 +22,5 @@ EXPOSE 3000
 VOLUME /var/lib/postgresql/data
 
 # Run database setup and start the app
-CMD npm run db:setup && npm start
+# CMD npm run db:setup && npm start
+CMD npm run db:setup && npm run dev

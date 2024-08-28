@@ -25,6 +25,19 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+router.get('/', async (req, res) => {
+  try {
+    const startups = await Startup.findAll();
+    if (startups) {
+      res.json(startups);
+    } else {
+      res.status(404).json({ error: 'No startups found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 router.put('/:id', async (req, res) => {
   try {
     const startup = await Startup.update(req.params.id, req.body);

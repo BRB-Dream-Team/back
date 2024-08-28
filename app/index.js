@@ -72,9 +72,26 @@ app.use((err, req, res, next) => {
   res.status(500).send('❌ Something broke!');
 });
 
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
+
+var options = {
+  customCss: '.swagger-ui .topbar { display: none }'
+};
+
+app.use((req, res, next) => {
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  next();
+});
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
+
 // Start the server
 app.listen(port, () => {
   console.log(`✅ Server: ${port}`);
+  console.log(`✅ Swagger Editor: http://localhost:${port}/api-docs`);
 });
 
 module.exports = app;

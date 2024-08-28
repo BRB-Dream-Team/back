@@ -15,6 +15,12 @@ class Phone {
     return result.rows[0];
   }
 
+  static async findAll() {
+    const query = 'SELECT * FROM Phone';
+    const result = await db.query(query);
+    return result.rows;
+  }
+
   static async update(phoneId, phoneData) {
     const { country_code, mobile_operator_code, phone_number } = phoneData;
     const query = 'UPDATE Phone SET country_code = $1, mobile_operator_code = $2, phone_number = $3 WHERE phone_id = $4 RETURNING *';

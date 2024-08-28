@@ -82,11 +82,15 @@ BEGIN
   IF NOT table_exists('passport') THEN
     CREATE TABLE Passport (
       passport_id SERIAL PRIMARY KEY,
-      series VARCHAR(2),
+      series VARCHAR(9),
       number INT,
       issue_date TIMESTAMP,
       expiration_date TIMESTAMP
     );
+  ELSE
+    -- If the table already exists, alter the column
+    ALTER TABLE Passport
+    ALTER COLUMN series TYPE VARCHAR(9);
   END IF;
 END $$;
 

@@ -15,6 +15,12 @@ class Startup {
     return result.rows[0];
   }
 
+  static async findAll() {
+    const query = 'SELECT * FROM Startup';
+    const result = await db.query(query);
+    return result.rows;
+  }
+
   static async update(startupId, startupData) {
     const { title, active_status, start_date, end_date, description, video_link, donated_amount, number_of_contributors, rating, type, batch, category_id, region_id } = startupData;
     const query = 'UPDATE Startup SET title = $1, active_status = $2, start_date = $3, end_date = $4, description = $5, video_link = $6, donated_amount = $7, number_of_contributors = $8, rating = $9, type = $10, batch = $11, category_id = $12, region_id = $13 WHERE startup_id = $14 RETURNING *';

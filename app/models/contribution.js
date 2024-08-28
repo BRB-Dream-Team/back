@@ -15,6 +15,12 @@ class Contribution {
     return result.rows[0];
   }
 
+  static async findByStartupId(startupId) {
+    const query = 'SELECT * FROM Contribution WHERE startup_id = $1';
+    const result = await db.query(query, [startupId]);
+    return result.rows;
+  }
+
   static async update(contributionId, contributionData) {
     const { start_date, end_date, amount, startup_id, contributor_id } = contributionData;
     const query = 'UPDATE Contribution SET start_date = $1, end_date = $2, amount = $3, startup_id = $4, contributor_id = $5 WHERE contribution_id = $6 RETURNING *';

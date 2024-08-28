@@ -25,6 +25,19 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+router.get('/', async (req, res) => {
+  try {
+    const phones = await Phone.findAll();
+    if (phones) {
+      res.json(phones);
+    } else {
+      res.status(404).json({ error: 'Phone not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 router.put('/:id', async (req, res) => {
   try {
     const phone = await Phone.update(req.params.id, req.body);

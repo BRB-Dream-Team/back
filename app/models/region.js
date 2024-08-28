@@ -14,6 +14,12 @@ class Region {
     return result.rows[0];
   }
 
+  static async findAll() {
+    const query = 'SELECT * FROM Region';
+    const result = await db.query(query);
+    return result.rows;
+  }
+
   static async update(regionId, regionData) {
     const { name } = regionData;
     const query = 'UPDATE Region SET name = $1 WHERE region_id = $2 RETURNING *';
