@@ -1,9 +1,24 @@
 const express = require('express');
 const User = require('../models/user');
+const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
-router.post('/', async (req, res) => {
+// Middleware to verify JWT token
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  if (token == null) return res.sendStatus(401);
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
+  });
+};
+
+// Register new user
+router.post('/register', async (req, res) => {
   try {
     const user = await User.create(req.body);
     res.status(201).json(user);
@@ -12,7 +27,23 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
+// Login
+router.post('/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const result = await User.authenticate(email, password);
+    if (result) {
+      res.json(result);
+    } else {
+      res.status(401).json({ error: 'Invalid credentials' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get user by ID (protected route)
+router.get('/:id', authenticateToken, async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     if (user) {
@@ -25,7 +56,8 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+// Update user (protected route)
+router.put('/:id', authenticateToken, async (req, res) => {
   try {
     const user = await User.update(req.params.id, req.body);
     if (user) {
@@ -38,7 +70,8 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+// Delete user (protected route)
+router.delete('/:id', authenticateToken, async (req, res) => {
   try {
     const user = await User.delete(req.params.id);
     if (user) {

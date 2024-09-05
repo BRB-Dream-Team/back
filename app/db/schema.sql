@@ -47,8 +47,14 @@ BEGIN
       last_name VARCHAR(255) NOT NULL,
       phone_id INT,
       email VARCHAR(255) NOT NULL UNIQUE,
+      password VARCHAR(255) NOT NULL,
       FOREIGN KEY (phone_id) REFERENCES Phone(phone_id)
     );
+  ELSE
+    -- If the table already exists, add the password column if it doesn't exist
+    IF NOT column_exists('users', 'password') THEN
+      ALTER TABLE Users ADD COLUMN password VARCHAR(255) NOT NULL;
+    END IF;
   END IF;
 END $$;
 
