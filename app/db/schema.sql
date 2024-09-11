@@ -37,7 +37,7 @@ BEGIN
   END IF;
 END $$;
 
--- Create or modify Users table
+-- Create Users table if it doesn't exist
 DO $$ 
 BEGIN
   IF NOT table_exists('users') THEN
@@ -53,7 +53,7 @@ BEGIN
   ELSE
     -- If the table already exists, add the password column if it doesn't exist
     IF NOT column_exists('users', 'password') THEN
-      ALTER TABLE Users ADD COLUMN password VARCHAR(255) NOT NULL DEFAULT 'changeme';
+      ALTER TABLE Users ADD COLUMN password VARCHAR(255) NOT NULL;
     END IF;
   END IF;
 END $$;
