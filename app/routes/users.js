@@ -9,10 +9,11 @@ const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
   if (token == null) return res.sendStatus(401);
-
+  
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err) return res.sendStatus(403);
     req.user = user;
+    req.isAdmin = user.isAdmin;
     next();
   });
 };
@@ -20,7 +21,8 @@ const authenticateToken = (req, res, next) => {
 // Register new user
 router.post('/register', async (req, res) => {
   try {
-    const user = await User.create(req.body);
+    const userData = { ...req.body, is_admin: false }; // Default to non-admin
+    const user = await User.create(userData);
     res.status(201).json(user);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -33,7 +35,7 @@ router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     const result = await User.authenticate(email, password);
     if (result) {
-      res.json(result);
+      res.json({ token: result.token });
     } else {
       res.status(401).json({ error: 'Invalid credentials' });
     }
