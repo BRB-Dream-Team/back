@@ -42,6 +42,10 @@
     {
       "name": "phones",
       "description": "Operations about phone numbers"
+    },
+    {
+      "name": "specifics",
+      "description": "Operations without bearer check"
     }
   ],
   "paths": {
@@ -58,7 +62,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/User"
+                "$ref": "#/components/schemas/UserInput"
               }
             }
           },
@@ -94,7 +98,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/User"
+                "$ref": "#/components/schemas/LoginInput"
               }
             }
           },
@@ -106,13 +110,16 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
+                  "$ref": "#/components/schemas/LoginResponse"
                 }
               }
             }
           },
           "400": {
             "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       }
@@ -1418,6 +1425,273 @@
           }
         }
       }
+    },
+    "/specific/user/{userId}": {
+      "get": {
+        "tags": [
+          "specifics"
+        ],
+        "summary": "Get user profile",
+        "description": "Returns user profile information",
+        "operationId": "getUserProfile",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user to return",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfile"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/specific/startup/{startupId}": {
+      "get": {
+        "tags": [
+          "specifics"
+        ],
+        "summary": "Get startup info",
+        "description": "Returns detailed information about a startup",
+        "operationId": "getStartupInfo",
+        "parameters": [
+          {
+            "name": "startupId",
+            "in": "path",
+            "description": "ID of startup to return",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StartupInfo"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Startup not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/specific/startup/all": {
+      "get": {
+        "tags": [
+          "specifics"
+        ],
+        "summary": "Get all startups",
+        "description": "Returns a list of all startups",
+        "operationId": "getAllStartups",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StartupInfo"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/specific/contribution/{contributionId}": {
+      "get": {
+        "tags": [
+          "specifics"
+        ],
+        "summary": "Get contribution info",
+        "description": "Returns detailed information about a contribution",
+        "operationId": "getContributionInfo",
+        "parameters": [
+          {
+            "name": "contributionId",
+            "in": "path",
+            "description": "ID of contribution to return",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContributionInfo"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Access denied"
+          },
+          "404": {
+            "description": "Contribution not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/specific/contribution/all/{startupId}": {
+      "get": {
+        "tags": [
+          "specifics"
+        ],
+        "summary": "Get all contributions for a startup",
+        "description": "Returns a list of all contributions for a specific startup",
+        "operationId": "getAllContributionsForStartup",
+        "parameters": [
+          {
+            "name": "startupId",
+            "in": "path",
+            "description": "ID of startup to get contributions for",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ContributionInfo"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "No contributions found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/specific/contribution/summary": {
+      "get": {
+        "tags": [
+          "specifics"
+        ],
+        "summary": "Get contribution summary",
+        "description": "Returns a summary of all contributions",
+        "operationId": "getContributionSummary",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContributionSummary"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1425,9 +1699,239 @@
       "BasicAuth": {
         "type": "http",
         "scheme": "basic"
+      },
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     },
     "schemas": {
+      "UserInput": {
+        "type": "object",
+        "required": [
+          "first_name",
+          "last_name",
+          "email",
+          "password"
+        ],
+        "properties": {
+          "first_name": {
+            "type": "string",
+            "description": "The user's first name"
+          },
+          "last_name": {
+            "type": "string",
+            "description": "The user's last name"
+          },
+          "email": {
+            "type": "string",
+            "description": "The user's email address"
+          },
+          "password": {
+            "type": "string",
+            "description": "The user's password"
+          },
+          "phone": {
+            "$ref": "#/components/schemas/Phone"
+          }
+        }
+      },
+      "LoginInput": {
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "The user's email address"
+          },
+          "password": {
+            "type": "string",
+            "description": "The user's password"
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "JWT token for authentication"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          }
+        }
+      },
+      "UserProfile": {
+        "type": "object",
+        "properties": {
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phone_number": {
+            "type": "string"
+          },
+          "entrepreneur": {
+            "$ref": "#/components/schemas/EntrepreneurProfile"
+          },
+          "contributor": {
+            "$ref": "#/components/schemas/ContributorProfile"
+          }
+        }
+      },
+      "EntrepreneurProfile": {
+        "type": "object",
+        "properties": {
+          "gender": {
+            "type": "string",
+            "enum": [
+              "male",
+              "female",
+              "non_binary"
+            ]
+          },
+          "passport": {
+            "$ref": "#/components/schemas/Passport"
+          },
+          "address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "startup_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        }
+      },
+      "ContributorProfile": {
+        "type": "object",
+        "properties": {
+          "gender": {
+            "type": "string",
+            "enum": [
+              "male",
+              "female",
+              "non_binary"
+            ]
+          },
+          "passport": {
+            "$ref": "#/components/schemas/Passport"
+          },
+          "contribution_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        }
+      },
+      "StartupInfo": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "boolean"
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "description": {
+            "type": "string"
+          },
+          "video": {
+            "type": "string"
+          },
+          "donated_amount": {
+            "type": "number"
+          },
+          "number_of_contributors": {
+            "type": "integer"
+          },
+          "rating": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "charity",
+              "equity"
+            ]
+          },
+          "batch": {
+            "type": "string",
+            "enum": [
+              "close_to_the_goal",
+              "just_launched",
+              "finished",
+              "none"
+            ]
+          },
+          "region": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "entrepreneur_name": {
+            "type": "string"
+          },
+          "entrepreneur_email": {
+            "type": "string"
+          },
+          "agreement": {
+            "type": "object"
+          }
+        }
+      },
+      "ContributionInfo": {
+        "type": "object",
+        "properties": {
+          "startup_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "contributor_name": {
+            "type": "string"
+          }
+        }
+      },
+      "ContributionSummary": {
+        "type": "object",
+        "properties": {
+          "total_amount": {
+            "type": "number"
+          },
+          "total_contributions": {
+            "type": "integer"
+          },
+          "recent_contributions": {
+            "type": "integer"
+          }
+        }
+      },
       "User": {
         "type": "object",
         "required": [
@@ -1853,6 +2357,9 @@
   "security": [
     {
       "BasicAuth": []
+    },
+    {
+      "BearerAuth": []
     }
   ]
 }

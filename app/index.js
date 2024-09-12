@@ -35,7 +35,7 @@ app.use('/regions', regionsRouter);
 app.use('/startups', startupsRouter);
 app.use('/contributions', contributionsRouter);
 app.use('/specifics', contributionsRouter);
-app.use('/payments', paymentsRouter);
+// app.use('/payments', paymentsRouter);
 
 // Test route
 app.get('/', (req, res) => {

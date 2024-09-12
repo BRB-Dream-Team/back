@@ -37,7 +37,33 @@ BEGIN
   END IF;
 END $$;
 
--- Create or modify Users table
+-- Create Passport table if it doesn't exist
+DO $$ 
+BEGIN
+  IF NOT table_exists('passport') THEN
+    CREATE TABLE Passport (
+      passport_id SERIAL PRIMARY KEY,
+      series VARCHAR(9),
+      number INT,
+      issue_date TIMESTAMP,
+      expiration_date TIMESTAMP
+    );
+  ELSE
+    -- If the table already exists, alter the column
+    ALTER TABLE Passport
+    ALTER COLUMN series TYPE VARCHAR(9);
+  END IF;
+END $$;
+
+-- Create user_role_enum type if it doesn't exist
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'user_role_enum') THEN
+    CREATE TYPE user_role_enum AS ENUM ('user', 'admin', 'banker');
+  END IF;
+END $$;
+
+-- Modify Users table to include role
 DO $$ 
 BEGIN
   IF NOT table_exists('users') THEN
@@ -45,15 +71,16 @@ BEGIN
       user_id SERIAL PRIMARY KEY,
       first_name VARCHAR(255) NOT NULL,
       last_name VARCHAR(255) NOT NULL,
-      phone_id INT,
+      phone_id INT REFERENCES Phone(phone_id),
+      passport_id INT REFERENCES Passport(passport_id),
       email VARCHAR(255) NOT NULL UNIQUE,
       password VARCHAR(255) NOT NULL,
-      FOREIGN KEY (phone_id) REFERENCES Phone(phone_id)
+      role user_role_enum NOT NULL DEFAULT 'user'
     );
   ELSE
-    -- If the table already exists, add the password column if it doesn't exist
-    IF NOT column_exists('users', 'password') THEN
-      ALTER TABLE Users ADD COLUMN password VARCHAR(255) NOT NULL DEFAULT 'changeme';
+    -- If the table already exists, add the role column if it doesn't exist
+    IF NOT column_exists('users', 'role') THEN
+      ALTER TABLE Users ADD COLUMN role user_role_enum NOT NULL DEFAULT 'user';
     END IF;
   END IF;
 END $$;
@@ -82,24 +109,6 @@ BEGIN
   END IF;
 END $$;
 
--- Create Passport table if it doesn't exist
-DO $$ 
-BEGIN
-  IF NOT table_exists('passport') THEN
-    CREATE TABLE Passport (
-      passport_id SERIAL PRIMARY KEY,
-      series VARCHAR(9),
-      number INT,
-      issue_date TIMESTAMP,
-      expiration_date TIMESTAMP
-    );
-  ELSE
-    -- If the table already exists, alter the column
-    ALTER TABLE Passport
-    ALTER COLUMN series TYPE VARCHAR(9);
-  END IF;
-END $$;
-
 -- Create BankAgreement table if it doesn't exist
 DO $$ 
 BEGIN
@@ -120,7 +129,6 @@ BEGIN
       entrepreneur_id SERIAL PRIMARY KEY,
       gender gender_enum,
       dob TIMESTAMP NOT NULL,
-      passport_id INT NOT NULL REFERENCES Passport(passport_id),
       address_id INT NOT NULL REFERENCES Address(address_id),
       agreement_id INT REFERENCES BankAgreement(agreement_id),
       startup_id INT
@@ -144,7 +152,6 @@ BEGIN
       contributor_id SERIAL PRIMARY KEY,
       gender gender_enum,
       dob TIMESTAMP NOT NULL,
-      passport_id INT NOT NULL REFERENCES Passport(passport_id),
       agreement_id INT REFERENCES BankAgreement(agreement_id)
     );
   END IF;
@@ -245,3 +252,45 @@ BEGIN
     FOREIGN KEY (startup_id) REFERENCES Startup(startup_id);
   END IF;
 END $$;
+
+-- Remove passport_id from Entrepreneur table if it exists
+ALTER TABLE Entrepreneur DROP COLUMN IF EXISTS passport_id;
+
+-- Remove passport_id from Contributor table if it exists
+ALTER TABLE Contributor DROP COLUMN IF EXISTS passport_id;
+
+-- Add unique constraints if they don't exist
+DO $$
+BEGIN
+    -- Check if the constraint doesn't exist before adding it to Users table
+    IF NOT EXISTS (
+        SELECT 1
+        FROM pg_constraint
+        WHERE conname = 'uq_user_passport' AND conrelid = 'users'::regclass
+    ) THEN
+        ALTER TABLE Users ADD CONSTRAINT uq_user_passport UNIQUE (passport_id);
+    END IF;
+
+    -- Check if the constraint doesn't exist before adding it to Passport table
+    IF NOT EXISTS (
+        SELECT 1
+        FROM pg_constraint
+        WHERE conname = 'uq_passport_user' AND conrelid = 'passport'::regclass
+    ) THEN
+        ALTER TABLE Passport ADD CONSTRAINT uq_passport_user UNIQUE (passport_id);
+    END IF;
+END$$;
+
+-- Create index if it doesn't exist
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1
+        FROM pg_class c
+        JOIN pg_namespace n ON n.oid = c.relnamespace
+        WHERE c.relname = 'idx_users_passport_id'
+        AND n.nspname = current_schema()
+    ) THEN
+        CREATE INDEX idx_users_passport_id ON Users(passport_id);
+    END IF;
+END$$;
