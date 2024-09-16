@@ -64,4 +64,42 @@ class User {
   }
 }
 
+// async function updateUserPasswordsWithBcrypt() {
+//   const getAllUsersQuery = 'SELECT user_id, password FROM Users';
+//   const updatePasswordQuery = 'UPDATE Users SET password = $1 WHERE user_id = $2';
+  
+//   try {
+//     // Get all users
+//     const result = await db.query(getAllUsersQuery);
+//     const users = result.rows;
+
+//     let updatedCount = 0;
+    
+//     for (const user of users) {
+//       // Check if the password is already hashed
+//       const isAlreadyHashed = user.password.startsWith('$2a$') || 
+//                               user.password.startsWith('$2b$') || 
+//                               user.password.startsWith('$2y$');
+      
+//       if (!isAlreadyHashed) {
+//         // Hash the password
+//         const hashedPassword = await bcrypt.hash(user.password, 10);
+        
+//         // Update the user's password in the database
+//         await db.query(updatePasswordQuery, [hashedPassword, user.user_id]);
+        
+//         updatedCount++;
+//       }
+//     }
+
+//     console.log(`Updated ${updatedCount} out of ${users.length} user passwords.`);
+//     return { totalUsers: users.length, updatedUsers: updatedCount };
+//   } catch (error) {
+//     console.error('Error updating user passwords:', error);
+//     throw error;
+//   }
+// }
+
+// updateUserPasswordsWithBcrypt()
+
 module.exports = User;
